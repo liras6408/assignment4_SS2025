@@ -79,7 +79,18 @@ Don't forget encodeURIComponent()
 If no cocktails found, fetch random
 */
 function fetchCocktailByDrinkIngredient(drinkIngredient) {
-    // Fill in
+  const url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${encodeURIComponent(drinkIngredient)}`;
+
+  return fetch(url)
+  .then((response)=>response.json())
+  .then((data) =>{
+    if(data.drinks && data.drinks.length > 0) {
+      const randomIndex = Math.floor(Math.random() * data.drinks.length);
+      return data.drinks[randomIndex]
+    } else {
+      return fetchRandomCocktail();
+    }
+  })
 }
 
 /*
@@ -87,14 +98,34 @@ Fetch a Random Cocktail (backup in case nothing is found by the search)
 Returns a Promise that resolves to cocktail object
 */
 function fetchRandomCocktail() {
-    // Fill in
+  return fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php")
+  .then((response) => response.json())
+  .then ((data) => data.drinks[0]);
 }
 
 /*
 Display Cocktail Data in the DOM
 */
 function displayCocktailData(cocktail) {
-    // Fill in
+    const container = document.getElementById("cocktail-container");
+
+    let ingredientsHTML = "";
+    for (let i = 1; i <= 15; i++) {
+      const ingredient = cocktail [`strIngredient${i}`]
+      const measure = cocktail [`strMeasure${i}`]
+      if (ingredient) {
+        ingredientsHTML += `<li>${ingredient} - ${measure || ""}</li>`;
+      }
+    }
+
+    container.innerHTML = `
+    <h2>${cocktail.strDrink}</h2>
+    <img src="${cocktail.strDrinkThumb}" alt="${cocktail.strDrink}" />
+    <h3>Ingredients</h3>
+    <ul>${ingredientsHTML}</ul>
+    <h3>Instructions</h3>
+    <p>${cocktail.strInstructions}</p>
+    `;
 }
 
 /*
