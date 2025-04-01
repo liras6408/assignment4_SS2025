@@ -84,6 +84,18 @@ function displayMealData(meal) {
     `;
 }
 
+function getIngredientsList(meal) {
+  let ingredientsHTML = "";
+  for (let i = 1; i <= 20; i++) {
+      const ingredient = meal[`strIngredient${i}`];
+      const measure = meal[`strMeasure${i}`];
+      if (ingredient && ingredient.trim() !== "") {
+          ingredientsHTML += `<li>${ingredient} - ${measure}</li>`;
+      }
+  }
+  return ingredientsHTML;
+}
+
 /*
 Convert MealDB Category to a TheCocktailDB Spirit
 Looks up category in our map, or defaults to 'cola'
