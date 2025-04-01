@@ -50,7 +50,17 @@ function init() {
  */
 function fetchRandomMeal() {
     // Fill in
+    return fetch("https://www.themealdb.com/api/json/v1/1/random.php")
+    .then(response => response.json())
+    .then(data =>{
+      console.log(data);
+      const meal = data.meals[0];
+      displayMealData(meal);
+      return meal;
+     })
+     .catch(error => console.error("Feil ved henting av måltidet:", error));
 }
+
 
 /*
 Display Meal Data in the DOM
@@ -60,6 +70,18 @@ Receives a meal object with fields like:
 */
 function displayMealData(meal) {
     // Fill in
+    const mealContainer = document.getElementById("meal-container");
+
+    mealContainer.innerHTML= `
+    <h2>${meal.strMeal}</h2>
+    <img src="${meal.strMealThumb}" alt="${meal.strMeal}" width="300">
+    <p><strong>Category:</strong> ${meal.strCategory}</p>
+    <h3>Ingredients:</h3>
+    <ul>${getIngredientsList(meal)}</ul>
+    <h3>Instructions:</h3>
+    <p>${meal.strInstructions}</p>
+
+    `;
 }
 
 /*
